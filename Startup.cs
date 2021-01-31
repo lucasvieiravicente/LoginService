@@ -8,7 +8,9 @@ using Microsoft.EntityFrameworkCore;
 using LoginService.Domain.DIs;
 using AutoMapper;
 using LoginService.Utils;
-using System.Linq;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
 
 namespace LoginService
 {
@@ -17,15 +19,18 @@ namespace LoginService
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            StaticConfig = configuration;
         }
 
         public IConfiguration Configuration { get; }
+        public static IConfiguration StaticConfig { get; private set; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddDbContext<DBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
             services.AddAutoMapper(typeof(ConfigMapper));
+            AddAuthentication(services);
             DIConfig.InjectRepositories(services);
             DIConfig.InjectServices(services);
         }
@@ -42,11 +47,32 @@ namespace LoginService
 
             app.UseRouting();
 
+            app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+            });
+        }
+
+        private void AddAuthentication(IServiceCollection services)
+        {
+            services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+            .AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+
+                    ValidIssuer = Configuration["Jwt:Issuer"],
+                    ValidAudience = Configuration["Jwt:Audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:Key"]))
+                };
             });
         }
     }

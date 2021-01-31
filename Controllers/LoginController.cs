@@ -1,6 +1,7 @@
 ﻿using LoginService.Domain.Models.Request;
 using LoginService.Domain.Models.Response;
 using LoginService.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 
@@ -17,12 +18,19 @@ namespace LoginService.Controllers
             _userLoginService = userLoginService;
         }
 
+        [AllowAnonymous]
         [HttpPost("Login")]
         public ActionResult<LoginResponse> Login(LoginRequest request)
         {
-            return Ok();
+            var result = _userLoginService.LoginRequest(request);
+
+            if (result != null)
+                return Ok(result);
+            else
+                return NotFound("Nenhum registro encontrado, verifique seu login e senha");
         }
 
+        [AllowAnonymous]
         [HttpPost("SignUp")]
         public ActionResult SignUp(SignUpRequest request)
         {
@@ -36,6 +44,7 @@ namespace LoginService.Controllers
             }
         }
 
+        [Authorize()]
         [HttpGet("Date")]
         public ActionResult<DateTime> GetDate()
         {

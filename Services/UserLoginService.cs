@@ -4,6 +4,7 @@ using LoginService.Domain.Models.Request;
 using LoginService.Domain.Models.Response;
 using LoginService.Domain.Repositories.Interfaces;
 using LoginService.Services.Interfaces;
+using LoginService.Utils;
 using System.Threading.Tasks;
 
 namespace LoginService.Services
@@ -21,15 +22,20 @@ namespace LoginService.Services
 
         public LoginResponse LoginRequest(LoginRequest request)
         {
-            var x = _userLoginRepository.FindByLogin(request.Login, request.Password);
+            var response = new LoginResponse();
+            var hasRegister = _userLoginRepository.FindByLogin(request.Login, HashUtil.HashPassword(request.Password));
 
-            return new LoginResponse();
+            if (hasRegister)
+                response.JwtResponse = TokenUtil.GenerateTokenJWT();
+            else
+                return null;
+
+            return response;
         }
 
         public async Task RegisterUser(SignUpRequest request)
         {
-            var user = _mapper.Map<User>(request);
-            await _userLoginRepository.InsertAsync(user);
+            await _userLoginRepository.InsertAsync(_mapper.Map<User>(request));
         }
     }
 }

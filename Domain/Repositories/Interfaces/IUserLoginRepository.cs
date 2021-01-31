@@ -5,6 +5,6 @@ namespace LoginService.Domain.Repositories.Interfaces
 {
     public interface IUserLoginRepository : IRepository<User>
     {
-        User FindByLogin(string login, string password);
+        bool FindByLogin(string login, byte[] password);
     }
 }

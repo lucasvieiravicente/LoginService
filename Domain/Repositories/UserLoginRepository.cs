@@ -15,11 +15,10 @@ namespace LoginService.Domain.Repositories
             _context = context;
         }
 
-        public User FindByLogin(string login, string password)
+        public bool FindByLogin(string login, byte[] password)
         {
             return _context.Set<User>()
-                           .Where(x => x.Login.Equals(login) && x.Password.Equals(password))
-                           .FirstOrDefault();
+                           .Where(x => x.Login.Equals(login) && x.Password.Equals(password)).Any();
         }
     }
 }
