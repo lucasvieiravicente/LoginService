@@ -9,7 +9,7 @@ namespace LoginService.Domain.Repositories.Base
 {
     public class Repository<T> : IRepository<T> where T : BaseEntity
     {
-        private DBContext _context;
+        private readonly DBContext _context;
 
         public Repository(DBContext context)
         {
@@ -29,14 +29,14 @@ namespace LoginService.Domain.Repositories.Base
         public virtual async Task InsertAsync(T entity)
         {
             await _context.AddAsync(entity);
-            await CommitAsync();
+            Commit();
         }
 
         public virtual void Update(T entity)
         {
             entity.ModifiedAt = DateTime.Now;
             _context.Update(entity);
-            CommitAsync();
+            Commit();
         }
 
         public virtual async Task RemoveAsync(Guid id)
@@ -56,18 +56,18 @@ namespace LoginService.Domain.Repositories.Base
         {
             var entity = await FindByIdAsync(id);
             _context.Remove(entity);
-            await CommitAsync();
+            Commit();
         }
 
-        public virtual async Task HardRemoveAsync(T entity)
+        public virtual void HardRemove(T entity)
         {
             _context.Remove(entity);
-            await CommitAsync();
+            Commit();
         }
 
-        private Task CommitAsync()
+        private void Commit()
         {
-            return _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
     }
 }

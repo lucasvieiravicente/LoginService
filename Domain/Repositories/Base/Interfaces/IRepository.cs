@@ -14,6 +14,6 @@ namespace LoginService.Domain.Repositories.Base.Interfaces
         Task RemoveAsync(Guid id);
         void Remove(T entity);
         Task HardRemoveAsync(Guid id);
-        Task HardRemoveAsync(T entity);
+        void HardRemove(T entity);
     }
 }
