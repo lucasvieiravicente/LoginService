@@ -1,2 +1,2 @@
 # LoginService
-An simple project to controll login users
+An simple project to control login users
