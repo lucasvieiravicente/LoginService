@@ -22,15 +22,12 @@ namespace LoginService.Services
 
         public LoginResponse LoginRequest(LoginRequest request)
         {
-            var response = new LoginResponse();
             var hasRegister = _userLoginRepository.FindByLogin(request.Login, HashUtil.HashPassword(request.Password));
 
             if (hasRegister)
-                response.JwtResponse = TokenUtil.GenerateTokenJWT();
+                return new LoginResponse(TokenUtil.GenerateTokenJWT());
             else
                 return null;
-
-            return response;
         }
 
         public async Task RegisterUser(SignUpRequest request)
