@@ -7,8 +7,6 @@
 
   <ItemGroup>
     <Folder Include="Domain\Models\Response\" />
-    <Folder Include="Domain\Repositories\" />
-    <Folder Include="Services\" />
   </ItemGroup>
 
   <ItemGroup>
