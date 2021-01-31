@@ -6,6 +6,9 @@ using Microsoft.Extensions.Hosting;
 using LoginService.Domain.Context;
 using Microsoft.EntityFrameworkCore;
 using LoginService.Domain.DIs;
+using AutoMapper;
+using LoginService.Utils;
+using System.Linq;
 
 namespace LoginService
 {
@@ -22,6 +25,7 @@ namespace LoginService
         {
             services.AddControllers();
             services.AddDbContext<DBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            services.AddAutoMapper(typeof(ConfigMapper));
             DIConfig.InjectRepositories(services);
             DIConfig.InjectServices(services);
         }

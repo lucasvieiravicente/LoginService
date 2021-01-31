@@ -5,6 +5,6 @@ namespace LoginService.Services.Interfaces
 {
     public interface IUserLoginService
     {
-        LoginResponse LoginRequest(LoginRequest request)
+        LoginResponse LoginRequest(LoginRequest request);
     }
 }

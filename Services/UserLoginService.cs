@@ -2,6 +2,7 @@
 using LoginService.Domain.Models.Response;
 using LoginService.Domain.Repositories.Interfaces;
 using LoginService.Services.Interfaces;
+using System.Threading.Tasks;
 
 namespace LoginService.Services
 {
@@ -19,6 +20,11 @@ namespace LoginService.Services
             var x = _userLoginRepository.FindByLogin(request.Login, request.Password);
 
             return new LoginResponse();
+        }
+
+        public async Task RegisterUser(SignUpRequest request)
+        {
+
         }
     }
 }
