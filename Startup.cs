@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using LoginService.Domain.Context;
 using Microsoft.EntityFrameworkCore;
+using LoginService.Domain.DIs;
 
 namespace LoginService
 {
@@ -17,11 +18,12 @@ namespace LoginService
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddDbContext<DBContext>(options => options.UseSqlServer(Configuration.GetConnectionString("DbConnection")));
+            DIConfig.InjectRepositories(services);
+            DIConfig.InjectServices(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

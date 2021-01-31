@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using LoginService.Domain.Models.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace LoginService.Controllers
@@ -11,7 +8,7 @@ namespace LoginService.Controllers
     public class LoginController : ControllerBase
     {
         [HttpPost]
-        public void Post(string value)
+        public void Post(LoginRequest request)
         {
         }
     }
